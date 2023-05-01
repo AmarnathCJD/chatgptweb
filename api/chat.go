@@ -62,7 +62,9 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 		scanner := bufio.NewScanner(resp.Body)
 		for scanner.Scan() {
 			fmt.Fprintf(w, "data: %s\n\n", scanner.Text())
-			w.(http.Flusher).Flush()
+			if f, ok := w.(http.Flusher); ok {
+				f.Flush()
+			}
 			fmt.Println("Flushed!")
 		}
 		return
