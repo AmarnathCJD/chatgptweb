@@ -155,7 +155,7 @@ func isValidSSID(ssid string) bool {
 	}
 
 	// if 60 seconds passed since ssid was generated, it's invalid
-	if time.Now().Unix()-hexToDec(time_part) > 60 {
+	if time.Now().Unix()-hexToDec(time_part) > 20 {
 		return false
 	}
 
