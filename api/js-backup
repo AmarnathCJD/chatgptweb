@@ -169,6 +169,8 @@ function fetchFromAPI(message, msgId) {
             return reader.read().then(processResult)
         }).finally(function () {
             setCookies("msgId", msgId)
+            data_time = new Date().getTime() / 1000
+            messageBox.setAttribute("data-time", data_time)
             var code = getHighlitableCodeFromText(finalTextV[finalTextV.length - 1])
             if (code == "" || code == undefined) {
                 return
