@@ -18,15 +18,17 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 	stream := r.URL.Query().Get("stream")
 	ssid := r.URL.Query().Get("ssid")
 	if ssid == "" {
-		w.Write([]byte("{\"error\": \"No ssid, suspicious\"}"))
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("{\"error\": \"no ssid, suspicious request\"}"))
 		return
 	}
 	if !isValidSSID(ssid) {
-		w.Write([]byte("{\"error\": \"Invalid ssid\"}"))
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte("{\"error\": \"invalid ssid, access denied\"}"))
 		return
 	}
 
-	var jsonStr = map[string]interface{}{
+	jsonData, _ := json.Marshal(map[string]interface{}{
 		"openaiKey": "",
 		"prompt":    messageQ,
 		"options": map[string]interface{}{
@@ -38,9 +40,7 @@ func ChatHandler(w http.ResponseWriter, r *http.Request) {
 				"model":            "gpt-3.5-turbo",
 			},
 		},
-	}
-
-	jsonData, _ := json.Marshal(jsonStr)
+	})
 	req, _ := http.NewRequest("POST", "https://ai.usesless.com/api/chat-process", strings.NewReader(string(jsonData)))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Accept", "application/json, text/plain, */*")
