@@ -6,7 +6,7 @@ function createBotMessage(message) {
     var currentTimeUnix = Math.floor(Date.now() / 1000)
     var msgId = genMessageId()
     var msg = ""
-    msg += `<li class="ml-6 mb-4 mt-6 " data-time=${currentTimeUnix} id="msg-${msgId}">
+    msg += `<li class="sm:ml-6 ml-0 sm:mb-4 mb-0 sm:mt-6 mt-1" data-time=${currentTimeUnix} id="msg-${msgId}">
     <span
         class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -left-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
         <img class="rounded-full shadow-lg" src="${GPT_ICON}"
@@ -30,7 +30,7 @@ function genMessageId() {
 function createUserMessage(message) {
     var currentTimeUnix = Math.floor(Date.now() / 1000)
     var msg = ""
-    msg += `<li class="ml-6 mb-6" data-time=${currentTimeUnix}>
+    msg += `<li class="sm:ml-6 ml-0 sm:mb-6 mb-0 sm:mt-6 mt-1" data-time=${currentTimeUnix}>
     <span
         class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -left-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
         <img class="rounded-full shadow-lg" src="${USER_ICON}"
@@ -39,7 +39,7 @@ function createUserMessage(message) {
     <div
         class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:bg-gray-700 dark:border-gray-600">
         <time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">Just Now</time>
-        <div class="text-sm font-normal text-gray-900 lex dark:text-gray-300">${message}</div>
+        <div class="sm:text-sm text-xs font-sans text-gray-900 lex dark:text-gray-300">${message}</div>
     </div>
             </li>`
     return msg
@@ -81,7 +81,7 @@ function getSince(postTime, currentTime) {
     if (since < 10) {
         return "Just Now"
     } else if (since < 60) {
-        return `${since} seconds ago`
+        return `${Math.floor(since)} seconds ago`
     } else if (since < 3600) {
         return `${Math.floor(since / 60)} minutes ago`
     } else if (since < 86400) {
@@ -131,7 +131,7 @@ function fetchFromAPI(message, msgId) {
 
     Animate()
 
-    fetch("/api/chat?parentId=" + getCookies("msgId") + "&message=" + message + "&stream=true&ssid=" + makeSSID(), {
+    fetch("https://gpt.kavya.workers.dev?parentId=" + getCookies("msgId") + "&message=" + message + "&stream=true&ssid=" + makeSSID(), {
         method: "GET",
     }).then(function (response) {
         var reader = response.body.getReader()
@@ -153,8 +153,8 @@ function fetchFromAPI(message, msgId) {
             animationActive = false
             for (var i = 0; i < lines.length; i++) {
                 var line = lines[i]
-                if (line.length > 0 && line.startsWith("data: ")) {
-                    var jsonData = JSON.parse(line.split("data: ")[1])
+                if (line.length > 0) {
+                    var jsonData = JSON.parse(line)
                     var finalText = jsonData["text"]
                     msgId = jsonData["id"]
                     if (finalText === undefined) {
@@ -265,21 +265,26 @@ function getCookies(name) {
 }
 
 var b = document.getElementById("mode");
+var bg = document.getElementById("dark-mode-toggle");
 
 // Change the icons inside the button based on previous settings
 if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
     b.src = "https://img.icons8.com/material-rounded/96/7950F2/bright-moon.png";
+    bg.classList.add('bg-gray-800');
     document.documentElement.classList.add('dark');
 } else {
     b.src = "https://img.icons8.com/material-rounded/192/FAB005/sun--v1.png";
+    bg.classList.remove('bg-gray-800');
     document.documentElement.classList.remove('dark');
 }
 
 function toggleUrl() {
     if (b.src == "https://img.icons8.com/material-rounded/96/7950F2/bright-moon.png") {
         b.src = "https://img.icons8.com/material-rounded/192/FAB005/sun--v1.png";
+        bg.classList.remove('bg-gray-800');
     } else {
         b.src = "https://img.icons8.com/material-rounded/96/7950F2/bright-moon.png";
+        bg.classList.add('bg-gray-800');
     }
 }
 

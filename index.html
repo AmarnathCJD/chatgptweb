@@ -35,7 +35,7 @@
                 <div class="flex items-center">
                     <div class="flex items-center ml-3">
                         <div>
-                            <button type="button"
+                            <button type="button" id="dark-mode-toggle"
                                 class="flex text-sm bg-gray-100 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600">
                                 <span class="sr-only">Dark Mode</span>
                                 <img class="w-8 h-8 rounded-full"
@@ -48,11 +48,11 @@
             </div>
         </div>
     </nav>
-    <div class="sm:p-8 p-1 mb-2">
-        <div class="mt-16 sm:p-4 p-2 border-2 border-gray-200 border-dashed rounded-t-lg dark:border-gray-700">
-            <div class=" mt-16 p-8 w-auto h-full flex max-h-screen overflow-y-auto flex-col flex-grow bg-purple-50 dark:bg-gray-800"
+    <div class="sm:p-8 p-0 mb-0 h-full">
+        <div class="sm:p-4 p-2 border-2 border-gray-200 border-dashed rounded-t-lg dark:border-gray-700">
+            <div class="mt-16 p-8 w-auto h-full flex overflow-y-auto flex-col flex-grow bg-purple-50 dark:bg-gray-800"
                 id="app">
-                <ol class="relative p-8 overflow-auto border-l border-gray-200 dark:border-gray-700 h-96" id="chatbox">
+                <ol class="relative sm:p-8 p-4 text-xs overflow-auto border-l border-gray-200 dark:border-gray-700 h-screen" id="chatbox">
                 </ol>
             </div>
 
